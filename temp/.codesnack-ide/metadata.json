@@ -1,0 +1,1 @@
+{"id":"b14ff389-f50f-4899-87da-f9779019cd31","name":"Temp","migratedToContainer":true,"projectPath":"temp","isWebProject":false,"size":6043736,"updatedAt":1641447695010,"config":{"version":"1.0","runConfigurations":[{"id":"19366275-1733-4077-b22c-29bbad3183dd","command":"g++ app.cpp -o app && ./app","name":"Default","isDefault":true}]}}
