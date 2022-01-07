@@ -4,19 +4,12 @@
 // the output in the terminal below.
 //
 // Happy coding! :-)
-// add a comment
-// and another comment
-
-#include "CircularBuffer.h"
-
+#include "../cslib/CircularBuffer.h"
 #include <iostream>
 
 int main() {
-    std::cout << "Hello, World!\n";
     CircularBuffer<float> cb;
-    cb.SetSize(5);
-    for (float i=1.1;i<10;i+=1)
-      cb.Push(i);
-    cb.Print();
+    cb.SetSize(10);
+    std::cout << "Hello, World!\n";
     return 0;
 }
