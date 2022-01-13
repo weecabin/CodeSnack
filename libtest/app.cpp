@@ -24,6 +24,7 @@ void task1()
 
 void SchedulerTest()
 {
+  println("\nScheduler Test...");
   Scheduler s(5);
   s.AddTask(new FunctionTask(task1,.5));
   s.AddTask(new ExampleTask("t1",.5));
@@ -33,6 +34,7 @@ void SchedulerTest()
 
 void CircularBufferTest()
 {
+  println("\nCircularBufferTest...");
   println("Created buffer of 10 floats, then added more than 10");
   println("Testing");
   CircularBuffer<float> cb;
