@@ -18,19 +18,23 @@ class Heading
   // rudder: Initial rudder position
   // turnRate: (degrees/sec)/degree of rudder setting
   // sampleInterval: time between samples
-  Heading(float initialValue,float rudder, float turnRate, float sampleInterval)
+  Heading(float initialValue,float initialRudder, float turnRate)
   {
     heading = initialValue;
-    this->rudder=rudder;
+    rudder=initialRudder;
     this->turnRate=turnRate; // degrees per second per 1 deg of rudder
-    interval = sampleInterval;
+    time = 0;
   }
   void SetRudder(float degrees)
   {
     rudder=degrees;
   }
-  float GetHeading()
+  float GetHeading(float time)
   {
+    if (this->time==time)
+      return heading;
+    float interval = time-this->time;
+    this->time=time;
     heading += rudder*turnRate*interval;
     heading = FixHeading(heading);
     return heading;
@@ -39,23 +43,31 @@ class Heading
   float heading;
   float rudder;
   float turnRate;
-  float interval;
+  float time;
 };
 
 int main() {
-    float target=2;
-    float interval=.5;
-    PIDCtrl p(2,0,0,interval,10);
-    Heading h(5,0,.1,interval);
+    float initialHeading=355;
+    float initialRudder=0;
+    float turnRate=.1;// (deg/sec)/rudderdeg
+    float target=5;
+    float interval=1;
+    float kp=5;
+    float ki=0;
+    float kd=0;
+  
+    PIDCtrl p(kp,ki,kd,interval,10);
+    Heading h(initialHeading,initialRudder,turnRate);
     println("time\terror\thead");
     for (int i=0;i<50;i++)
     {
-      print(i*interval);print("\t");
-      print(HeadingError(target,h.GetHeading()));
-      print("\t");
-      p.NextError(-HeadingError(target,h.GetHeading()));
+      float time = i*interval;
+      float heading = h.GetHeading(time);
+      print(time);
+      print("\t");print(HeadingError(target,heading));
+      print("\t");println(heading);
+      p.NextError(-HeadingError(target,heading));
       h.SetRudder(p.Correction());
-      println(h.GetHeading());
     }
     return 0;
 }
