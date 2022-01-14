@@ -2,6 +2,7 @@
 
 #include "../cslib/CircularBuffer.h"
 #include "../cslib/Scheduler.h"
+
 #include <iostream>
 
 #define print(x)(std::cout<<x)
@@ -11,9 +12,8 @@ void CircularBufferTest();
 void SchedulerTest();
 
 int main() {
-    
-    CircularBufferTest();
-    SchedulerTest();
+    //CircularBufferTest();
+    //SchedulerTest();
     return 0;
 }
 
@@ -50,14 +50,14 @@ void CircularBufferTest()
   println("remove the 5'th element");
   cb.Delete(5);
   cb.Print();
-  println("insert at the 5'th");
+  println("insert 29.1 at the 5'th");
   cb.Insert(5,29.1);
   cb.Print();
-  println("insert at the 9'th");
+  println("insert 39.1 at the 9'th");
   cb.Insert(9,39.1);
   cb.Print();
-  println("insert at the 10'th");
-  println("nothing should happen, can't insert at the end");
+  println("insert 30.1 at the 10'th");
+  println("nothing should happen, can't insert one past the end");
   cb.Insert(10,30.1);
   cb.Print();
 }
