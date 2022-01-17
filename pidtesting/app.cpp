@@ -8,6 +8,7 @@
 #include "../cslib/Navigation.h"
 #include <iostream>
 #include <iomanip>
+#include <cmath>
 
 #define println(x)(std::cout<<std::setprecision(3)<<x<<"\n")
 #define print(x)(std::cout<<std::setprecision(3)<<x)
@@ -77,6 +78,7 @@ int main() {
     Heading h(initialHeading,initialRudder,maxRudder,turnRate,windRate);
     if (false)
     {
+    int count=0;
     for (float kp=0;kp<=5;kp+=.2)
       for (float ki=0;ki<=5;ki+=.2)
         for(float kd=0;kd>=-5;kd-=.2)
@@ -91,18 +93,34 @@ int main() {
             p.NextError(-HeadingError(target,heading));
             h.SetRudder(p.Correction());
           }
-          float err = abs(heading-target);
-          if (p.DeltaError()<0.1 && err<0.1)
+          float piddelta = p.DeltaError();
+          float headerr = std::abs(target-heading);
+          /*
+          if (headerr<.001f)
           {
-            print(heading);print("/");print(target);print(" ");println(err);
+            print(target);print("-");println(heading);
+            print("headerr: ");
+            println(headerr);
+          }
+          if (piddelta<.1f)
+          {
+            print("piddelta: ");
+            println(piddelta);
+          }
+          */
+          if ((piddelta<.1f) && (headerr<.1f))
+          {
+            count++;
+            print(heading);print("/");print(target);print(" ");println(headerr);
             print("kp,ki,kd: ");print(kp);print(",");print(ki);print(",");print(kd);
-            print(" DeltaErr: ");print(p.DeltaError());print(" heading: ");println(heading);
+            print(" DeltaErr: ");print(piddelta);print(" heading: ");println(heading);
           }
         }
+        print("Count: ");println(count);
       }
       else
       {
-        p.SetCoefficients(2.8,0,0);
+        p.SetCoefficients(3.4,0,-.8);
         h.Init(initialHeading,initialRudder);
         print("Heading Target: ");println(target);
         println("time\terror\trudder\thead");
