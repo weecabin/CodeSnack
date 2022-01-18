@@ -62,7 +62,7 @@ class Heading
   float time;
   float windRate;
 };
-enum LoopType {proportional,integral};
+enum LoopType {proportional,diffeential};
 int main() {
     float initialHeading=0;
     float initialRudder=0;
@@ -70,15 +70,15 @@ int main() {
     float turnRate=.1;// (deg/sec)/rudderdeg
     float target=10.0;
     float interval=1;
-    float windRate=.5;
+    float windRate=1;
     PIDCtrl p(0,0,0,interval,10);
-    int testLoopLen = 30;
+    int testLoopLen = 60;
     Heading h(initialHeading,initialRudder,maxRudder,turnRate,windRate);
     float kp1=1;
     float ki1=0;
     float kd1=0;
-    LoopType lt = integral;
-    //LoopType lt = proportional;
+    //LoopType lt = diffeential;;
+    LoopType lt = proportional;
     if (true)
     {
     int count=0;
@@ -94,7 +94,7 @@ int main() {
             float time =i*interval;
             heading = h.GetHeading(time);
             p.NextError(-HeadingError(target,heading));
-            if (lt==integral)
+            if (lt==diffeential)
               h.SetRudder(h.GetRudder()+p.Correction());
             else
               h.SetRudder(p.Correction());
@@ -112,7 +112,7 @@ int main() {
             ki1=ki;
           }
         }
-        print("Count: ");println(count);
+        print("Optimized PID Count: ");println(count);
       }
       if (true)
       {
@@ -124,7 +124,9 @@ int main() {
         print("Using kp,ki,kd: ");print(kp1);print(",");print(ki1);print(",");println(kd1);
         p.SetCoefficients(kp1,ki1,kd1);
         h.Init(initialHeading,initialRudder);
-        print("Heading Target: ");println(target);
+        print("Target Heading: ");println(target);
+        print("Initial Heading: ");println(initialHeading);
+        print("Wind Rate(deg/sec): ");println(windRate);
         println("time\tPIDdx\terror\trudder\thead");
        for (int i=0;i<testLoopLen;i++)
        {
@@ -136,13 +138,14 @@ int main() {
         print("\t");print(h.GetRudder());
         print("\t");println(heading);
         p.NextError(-HeadingError(target,heading));
-        if (lt==integral)
+        if (lt==diffeential)
           h.SetRudder(h.GetRudder()+p.Correction());
         else
           h.SetRudder(p.Correction());
       }
-      print("Integral: ");println(p.Integral());
-      print("Delta: ");println(p.DeltaError());
+      if (ki1!=0)
+        print("PID Integral Term: ");println(p.Integral());
+      print("PID Dataset Delta: ");println(p.DeltaError());
       p.Print();
     }
     return 0;
