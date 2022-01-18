@@ -62,7 +62,7 @@ class Heading
   float time;
   float windRate;
 };
-
+enum LoopType {proportional,integral};
 int main() {
     float initialHeading=0;
     float initialRudder=0;
@@ -70,12 +70,15 @@ int main() {
     float turnRate=.1;// (deg/sec)/rudderdeg
     float target=10.0;
     float interval=1;
-    float windRate=0;
+    float windRate=.5;
     float kp=5;
     float ki=.9;
     float kd=0;
-    PIDCtrl p(kp,ki,kd,interval,20);
+    PIDCtrl p(kp,ki,kd,interval,10);
+    int testLoopLen = 30;
     Heading h(initialHeading,initialRudder,maxRudder,turnRate,windRate);
+    LoopType lt = integral;
+    //LoopType lt = proportional;
     if (false)
     {
     int count=0;
@@ -86,32 +89,22 @@ int main() {
           p.SetCoefficients(kp,ki,kd);
           h.Init(initialHeading,initialRudder);
           float heading;
-          for (int i=0;i<30;i++)
+          for (int i=0;i<testLoopLen;i++)
           {
             float time =i*interval;
             heading = h.GetHeading(time);
             p.NextError(-HeadingError(target,heading));
-            h.SetRudder(p.Correction());
+            if (lt==integral)
+              h.SetRudder(h.GetRudder()+p.Correction());
+            else
+              h.SetRudder(p.Correction());
           }
           float piddelta = p.DeltaError();
           float headerr = std::abs(target-heading);
-          /*
-          if (headerr<.001f)
-          {
-            print(target);print("-");println(heading);
-            print("headerr: ");
-            println(headerr);
-          }
-          if (piddelta<.1f)
-          {
-            print("piddelta: ");
-            println(piddelta);
-          }
-          */
-          if ((piddelta<.1f) && (headerr<.1f))
+          if ((piddelta<.1) && (headerr<.1))
           {
             count++;
-            print(heading);print("/");print(target);print(" ");println(headerr);
+            //print(heading);print("/");print(target);print(" ");println(headerr);
             print("kp,ki,kd: ");print(kp);print(",");print(ki);print(",");print(kd);
             print(" DeltaErr: ");print(piddelta);print(" heading: ");println(heading);
           }
@@ -120,22 +113,27 @@ int main() {
       }
       else
       {
-        p.SetCoefficients(3.4,0,-.8);
+        p.SetCoefficients(5,.2,-5);
         h.Init(initialHeading,initialRudder);
         print("Heading Target: ");println(target);
-        println("time\terror\trudder\thead");
-       for (int i=0;i<40;i++)
+        println("time\tPIDdx\terror\trudder\thead");
+       for (int i=0;i<testLoopLen;i++)
        {
         float time = i*interval;
         float heading = h.GetHeading(time);
         print(time);
+        print("\t");print(p.DeltaError());
         print("\t");print(HeadingError(target,heading));
         print("\t");print(h.GetRudder());
         print("\t");println(heading);
         p.NextError(-HeadingError(target,heading));
-        h.SetRudder(p.Correction());
+        if (lt==integral)
+          h.SetRudder(h.GetRudder()+p.Correction());
+        else
+          h.SetRudder(p.Correction());
       }
       print("Integral: ");println(p.Integral());
+      print("Delta: ");println(p.DeltaError());
       p.Print();
     }
     return 0;
