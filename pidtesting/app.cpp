@@ -71,15 +71,15 @@ int main() {
     float target=10.0;
     float interval=1;
     float windRate=.5;
-    float kp=5;
-    float ki=.9;
-    float kd=0;
-    PIDCtrl p(kp,ki,kd,interval,10);
+    PIDCtrl p(0,0,0,interval,10);
     int testLoopLen = 30;
     Heading h(initialHeading,initialRudder,maxRudder,turnRate,windRate);
+    float kp1=1;
+    float ki1=0;
+    float kd1=0;
     LoopType lt = integral;
     //LoopType lt = proportional;
-    if (false)
+    if (true)
     {
     int count=0;
     for (float kp=0;kp<=5;kp+=.2)
@@ -101,19 +101,28 @@ int main() {
           }
           float piddelta = p.DeltaError();
           float headerr = std::abs(target-heading);
-          if ((piddelta<.1) && (headerr<.1))
+          if ((piddelta<.01) && (headerr<.01))
           {
             count++;
             //print(heading);print("/");print(target);print(" ");println(headerr);
             print("kp,ki,kd: ");print(kp);print(",");print(ki);print(",");print(kd);
             print(" DeltaErr: ");print(piddelta);print(" heading: ");println(heading);
+            kp1=kp;
+            kd1=kd;
+            ki1=ki;
           }
         }
         print("Count: ");println(count);
       }
-      else
+      if (true)
       {
-        p.SetCoefficients(5,.2,-5);
+        print("LoopType: ");
+        if (lt==proportional)
+          println("Proportional");
+        else
+            println("Integral");
+        print("Using kp,ki,kd: ");print(kp1);print(",");print(ki1);print(",");println(kd1);
+        p.SetCoefficients(kp1,ki1,kd1);
         h.Init(initialHeading,initialRudder);
         print("Heading Target: ");println(target);
         println("time\tPIDdx\terror\trudder\thead");
