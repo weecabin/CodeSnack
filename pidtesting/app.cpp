@@ -135,9 +135,8 @@ int main() {
       }
       if (mf.Size()>0)
       {
-        print("\noptimized kp:");print(mf[0][0]);
-        print(",ki:");print(mf[0][1]);
-        print(",kd:");println(mf[0][2]);
+        std::vector<float> opt= mf.GetValue(0);
+        std::cout<<"\noptimized kp:"<<opt[0]<<",ki:"<<opt[1]<<",kd:"<<opt[2]<<"\n";
         
         print("LoopType: ");
         if (lt==proportional)
