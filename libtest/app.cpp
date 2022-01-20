@@ -2,18 +2,14 @@
 
 #include "../cslib/CircularBuffer.h"
 #include "../cslib/Scheduler.h"
-
-#include <iostream>
-
-#define print(x)(std::cout<<x)
-#define println(x)(std::cout<<x<<"\n")
+#include "../cslib/MyDefines.h"
 
 void CircularBufferTest();
 void SchedulerTest();
 
 int main() {
-    //CircularBufferTest();
-    //SchedulerTest();
+    CircularBufferTest();
+    SchedulerTest();
     return 0;
 }
 
@@ -26,9 +22,13 @@ void SchedulerTest()
 {
   println("\nScheduler Test...");
   Scheduler s(5);
-  s.AddTask(new FunctionTask(task1,.5));
-  s.AddTask(new ExampleTask("t1",.5));
-  s.AddTask(new ExampleTask("t2",1));
+  s.AddTask(new FunctionTask(task1,.1));
+  s.AddTask(new ExampleTask("\tt1",.1));
+  s.AddTask(new ExampleTask("\t\tt2",.2));
+  s.AddTask(new ExampleTask("\t\t\tt3",.3));
+  s.AddTask(new ExampleTask("\t\t\t\tt4",.4));
+  s.AddTask(new ExampleTask("t5",.5)); // shouldn't go, as it would exceed 5 tsaks
+  s.AddTask(new ExampleTask("t6",.5));// shouldn't go, as it would exceed 5 tsaks
   s.Run(5);
 }
 
