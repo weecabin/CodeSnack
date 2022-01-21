@@ -2,18 +2,68 @@
 #define MYLIST_H
 #include <iostream>
 
-template<class A, class B> class node
+template<class A, class B> class Node
 {
   public:
-  node(){};
-  node(A key, B value)
+  Node(){};
+  Node(A key, B value)
   {
     this->key=key;
     this->value=value;
   }
   A key;
   B value;
-  node<A,B> *next;
+  Node<A,B> *next;
+};
+
+
+template<class A, class B>
+class Iterator
+{
+    // constructor that takes in a pointer from the linked list
+    public:
+    Iterator() noexcept : current_node(nullptr){};
+    Iterator(Node<A,B> *node) noexcept : current_node(node){};
+
+    // incrementing means going through the list
+    Iterator &operator++() noexcept
+    {
+        if (current_node != nullptr)
+        {
+            previous_node = current_node;
+            current_node = current_node->next;
+        }
+        return *this;
+    };
+
+    // post fixing is bad in general but it has it's usages
+    Iterator operator++(int) noexcept
+    {
+        Iterator tempIter = *this; // we make a copy of the iterator
+        ++*this;                   // we increment
+        return tempIter;           // we return the copy before increment
+    };
+
+    // we need to be able to compare nodes
+    bool operator!=(const Iterator &other) const noexcept
+    {
+        return this->current_node != other.current_node;
+    };
+
+    // return the data from the node (dereference operator)
+    void Print()
+    {
+      std::cout<<current_node->value;
+    }
+    B operator*() noexcept
+    {
+        //std::cout<<this->current_node->value<<"\n";
+        return this->current_node->value;
+    };
+
+private:
+    const Node<A,B> *previous_node = nullptr;
+    const Node<A,B> *current_node = nullptr;
 };
 
 template<class A, class B> class MyList
@@ -21,19 +71,19 @@ template<class A, class B> class MyList
   public:
   ~MyList()
   {
-    node<A,B> *temp=first;
-    while(temp!=end)
+    Node<A,B> *temp=first;
+    while(temp!=emptynode)
     {
       temp=temp->next;
       delete first;
       first = temp;
     }
-    delete end;
+    delete emptynode;
   }
   void Print()
   {
-    node<A,B>* temp=first;
-    while(temp!=end)
+    Node<A,B>* temp=first;
+    while(temp!=emptynode)
     {
       std::cout<<"key:"<<temp->key<<" value:"<<temp->value<<"\n";
       temp=temp->next;
@@ -43,20 +93,29 @@ template<class A, class B> class MyList
   {
     if (size++==0)
     {
-      first = last = new node<A,B>(key,value);
-      end=new node<A,B>; // end node
-      first->next = end;
+      first = last = new Node<A,B>(key,value);
+      emptynode=new Node<A,B>; // empty end node
+      first->next = emptynode;
       return;
     }
-    node<A,B>* newnode = new node<A,B>(key,value);
+    Node<A,B>* newnode = new Node<A,B>(key,value);
     last->next = newnode;
-    newnode->next = end;
+    last = newnode;
+    newnode->next = emptynode;
+  }
+  Iterator<A,B> begin()
+  {
+    return Iterator<A,B>(first);
+  }
+  Iterator<A,B> end()
+  {
+    return Iterator<A,B>(emptynode);
   }
   private:
   int size=0;
-  node<A,B> *first;
-  node<A,B> *last;
-  node<A,B> *end;
+  Node<A,B> *first;
+  Node<A,B> *last;
+  Node<A,B> *emptynode;
 };
 
 #endif

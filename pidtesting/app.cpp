@@ -74,7 +74,7 @@ int main() {
     float turnRate=.1;// (deg/sec)/rudderdeg
     float target=10.0;
     float interval=1;
-    float windRate=1;
+    float windRate=2;
     PIDCtrl p(0,0,0,interval,10);
     int testLoopLen = 40;
     Heading h(initialHeading,initialRudder,maxRudder,turnRate,windRate);
