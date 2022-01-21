@@ -13,9 +13,8 @@ template<class A, class B> class Node
   }
   A key;
   B value;
-  Node<A,B> *next;
+  Node<A,B> *next=nullptr;
 };
-
 
 template<class A, class B>
 class Iterator
@@ -39,8 +38,8 @@ class Iterator
     // post fixing is bad in general but it has it's usages
     Iterator operator++(int) noexcept
     {
-        Iterator tempIter = *this; // we make a copy of the iterator
-        ++*this;                   // we increment
+        Iterator tempIter = *this;// we make a copy of the iterator
+        ++*this;                   // we increment and updata previous_node in the process
         return tempIter;           // we return the copy before increment
     };
 
@@ -50,20 +49,35 @@ class Iterator
         return this->current_node != other.current_node;
     };
 
-    // return the data from the node (dereference operator)
+    // debug dump value 
     void Print()
     {
       std::cout<<current_node->value;
-    }
+    };
+
+    // return the data from the node (dereference operator)
     B operator*() noexcept
     {
         //std::cout<<this->current_node->value<<"\n";
         return this->current_node->value;
     };
 
+    Iterator operator[](A key)
+    { 
+      Node<A,B> *temp = current_node;
+      while(temp->next!=nullptr)
+      {
+        //println(temp->key);
+        if (temp->key==key)
+          break;
+        temp=temp->next;
+      }
+      return Iterator(temp);
+    }
+
 private:
-    const Node<A,B> *previous_node = nullptr;
-    const Node<A,B> *current_node = nullptr;
+    Node<A,B> *previous_node = nullptr;
+    Node<A,B> *current_node = nullptr;
 };
 
 template<class A, class B> class MyList
