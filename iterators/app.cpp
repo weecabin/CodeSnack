@@ -7,9 +7,6 @@
 #include "../cslib/MyDefines.h"
 #include "MyList.h"
 
-template<class A, class B> class node;
-template<class A, class B> class MyList;
-
 int main() {
     std::cout << "Hello, World!\n";
 
@@ -18,10 +15,10 @@ int main() {
     {
       list.Insert(10-i,10-i*1.1);
     }
-    println("using internal List Print()...");
+    println("print with MyList.Print()...");
     list.Print();
   
-    println("print using the iterator...");
+    println("print a few values using the iterator...");
     Iterator<int,float> itr(list.begin());
     println(*itr++);
     println(*itr);
