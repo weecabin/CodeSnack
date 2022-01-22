@@ -83,21 +83,25 @@ private:
 template<class A, class B> class MyList
 {
   public:
+  MyList()
+  {
+    endnode=new Node<A,B>; // empty end node
+  }
   ~MyList()
   {
     Node<A,B> *temp=first;
-    while(temp!=emptynode)
+    while(temp!=endnode)
     {
       temp=temp->next;
       delete first;
       first = temp;
     }
-    delete emptynode;
+    delete endnode;
   }
   void Print()
   {
     Node<A,B>* temp=first;
-    while(temp!=emptynode)
+    while(temp!=endnode)
     {
       std::cout<<"key:"<<temp->key<<" value:"<<temp->value<<"\n";
       temp=temp->next;
@@ -108,28 +112,51 @@ template<class A, class B> class MyList
     if (size++==0)
     {
       first = last = new Node<A,B>(key,value);
-      emptynode=new Node<A,B>; // empty end node
-      first->next = emptynode;
+      first->next = endnode;
       return;
     }
     Node<A,B>* newnode = new Node<A,B>(key,value);
     last->next = newnode;
     last = newnode;
-    newnode->next = emptynode;
+    newnode->next = endnode;
   }
+  void Sort()
+  {
+    Node<A,B> *n1 = first;
+    Node<A,B> *n2;
+    int count=0;
+    while(n1->next!=endnode)
+    {
+      n2=n1->next;
+      while(n2!=endnode)
+      {
+        if (n2->key < n1->key) 
+        {
+          Node<A,B> temp(n1->key,n1->value);
+          n1->key=n2->key;
+          n1->value=n2->value;
+          n2->key=temp.key;
+          n2->value=temp.value;
+        }
+        n2=n2->next;
+      }
+      n1=n1->next;
+    }
+  }
+
   Iterator<A,B> begin()
   {
     return Iterator<A,B>(first);
   }
   Iterator<A,B> end()
   {
-    return Iterator<A,B>(emptynode);
+    return Iterator<A,B>(endnode);
   }
   private:
   int size=0;
   Node<A,B> *first;
   Node<A,B> *last;
-  Node<A,B> *emptynode;
+  Node<A,B> *endnode;
 };
 
 #endif

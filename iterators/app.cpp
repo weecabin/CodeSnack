@@ -16,7 +16,7 @@ int main() {
     MyList<int,float> list;
     for (int i=1;i<11;i++)
     {
-      list.Insert(i,i*1.1);
+      list.Insert(10-i,10-i*1.1);
     }
     println("using internal List Print()...");
     list.Print();
@@ -36,6 +36,11 @@ int main() {
     println("now find key 3");
     itr = list.begin();
     print("key 3 value = ");println(*itr[3]);
+
+    println("Sort the list");
+    list.Sort();
+    list.Print();
+
     return 0;
 }
 
