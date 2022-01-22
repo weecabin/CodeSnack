@@ -2,27 +2,30 @@
 #define MYLIST_H
 #include <iostream>
 
-template<class A, class B> class Node
+template<class A, class B> class MapNode
 {
   public:
-  Node(){};
-  Node(A key, B value)
+  MapNode(){};
+  MapNode(A key, B value)
   {
     this->key=key;
     this->value=value;
   }
   A key;
   B value;
-  Node<A,B> *next=nullptr;
+  MapNode<A,B> *next=nullptr;
 };
+
+
 
 template<class A, class B>
 class Iterator
 {
+    using Node2_t = MapNode<A,B>;
     // constructor that takes in a pointer from the linked list
     public:
     Iterator() noexcept : current_node(nullptr){};
-    Iterator(Node<A,B> *node) noexcept : current_node(node){};
+    Iterator(Node2_t *node) noexcept : current_node(node){};
 
     // incrementing means going through the list
     Iterator &operator++() noexcept
@@ -64,7 +67,7 @@ class Iterator
 
     Iterator operator[](A key)
     { 
-      Node<A,B> *temp = current_node;
+      Node2_t *temp = current_node;
       while(temp->next!=nullptr)
       {
         //println(temp->key);
@@ -76,20 +79,21 @@ class Iterator
     }
 
 private:
-    Node<A,B> *previous_node = nullptr;
-    Node<A,B> *current_node = nullptr;
+    Node2_t *previous_node = nullptr;
+    Node2_t *current_node = nullptr;
 };
 
-template<class A, class B> class MyList
+template<class A, class B> class MapList
 {
+  using Node2_t = MapNode<A,B>;
   public:
-  MyList()
+  MapList()
   {
-    endnode=new Node<A,B>; // empty end node
+    endnode=new Node2_t; // empty end node
   }
-  ~MyList()
+  ~MapList()
   {
-    Node<A,B> *temp=first;
+    Node2_t *temp=first;
     while(temp!=endnode)
     {
       temp=temp->next;
@@ -100,7 +104,7 @@ template<class A, class B> class MyList
   }
   void Print()
   {
-    Node<A,B>* temp=first;
+    Node2_t* temp=first;
     while(temp!=endnode)
     {
       std::cout<<"key:"<<temp->key<<" value:"<<temp->value<<"\n";
@@ -111,19 +115,19 @@ template<class A, class B> class MyList
   {
     if (size++==0)
     {
-      first = last = new Node<A,B>(key,value);
+      first = last = new Node2_t(key,value);
       first->next = endnode;
       return;
     }
-    Node<A,B>* newnode = new Node<A,B>(key,value);
+    Node2_t* newnode = new Node2_t(key,value);
     last->next = newnode;
     last = newnode;
     newnode->next = endnode;
   }
   void Sort()
   {
-    Node<A,B> *n1 = first;
-    Node<A,B> *n2;
+    Node2_t *n1 = first;
+    Node2_t *n2;
     int count=0;
     while(n1->next!=endnode)
     {
@@ -132,7 +136,7 @@ template<class A, class B> class MyList
       {
         if (n2->key < n1->key) 
         {
-          Node<A,B> temp(n1->key,n1->value);
+          Node2_t temp(n1->key,n1->value);
           n1->key=n2->key;
           n1->value=n2->value;
           n2->key=temp.key;
@@ -154,9 +158,9 @@ template<class A, class B> class MyList
   }
   private:
   int size=0;
-  Node<A,B> *first;
-  Node<A,B> *last;
-  Node<A,B> *endnode;
+  Node2_t *first;
+  Node2_t *last;
+  Node2_t *endnode;
 };
 
 #endif
