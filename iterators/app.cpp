@@ -38,6 +38,17 @@ int main() {
     list.Sort();
     list.Print();
 
+    println("\ndelete key 8");
+    list.Delete(8);
+    list.Print();
+
+    println("\ndelete key 0");
+    list.Delete(0);
+    list.Print();
+
+    println("\ndelete key 9");
+    list.Delete(9);
+    list.Print();
     return 0;
 }
 

@@ -111,6 +111,33 @@ template<class A, class B> class MapList
     }
     delete endnode;
   }
+
+  void Delete(A key)
+  {
+    Node2_t *prev;
+    Node2_t *ptr=first;
+    while(ptr != endnode)
+    {
+      if (ptr->key==key)
+        break;
+      prev=ptr;
+      ptr=ptr->next;
+    }
+    if (ptr == first)
+    {
+      first = ptr->next;
+    }
+    else if (ptr == last)
+    {
+      prev->next = endnode;
+    }
+    else
+    {
+      prev->next = ptr->next;
+    }
+    delete ptr;
+  }
+
   void Print()
   {
     Node2_t* temp=first;
