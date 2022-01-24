@@ -87,10 +87,19 @@ template<class A, class B> class MapList
 {
   using Node2_t = MapNode<A,B>;
   public:
-  MapList()
+
+  MapList(bool sort)
   {
+    this->sort=sort;
     endnode=new Node2_t; // empty end node
   }
+
+  MapList()
+  {
+    this->sort=true;
+    endnode=new Node2_t;
+  }
+
   ~MapList()
   {
     Node2_t *temp=first;
@@ -113,16 +122,48 @@ template<class A, class B> class MapList
   }
   void Insert(A key, B value)
   {
+    Node2_t* newnode = new Node2_t(key,value);
     if (size++==0)
     {
-      first = last = new Node2_t(key,value);
+      first = last = newnode;
       first->next = endnode;
       return;
     }
-    Node2_t* newnode = new Node2_t(key,value);
-    last->next = newnode;
-    last = newnode;
-    newnode->next = endnode;
+    if (sort)
+    {
+      Node2_t *ptr=first;
+      Node2_t *prev=nullptr;
+      while (ptr != endnode)
+      {
+        if (key < ptr->key)
+          break;
+        prev=ptr;
+        ptr=ptr->next;
+      }
+      if (ptr==first)
+      {
+        newnode->next = ptr;
+        first=newnode;
+        return;
+      }
+      else if (ptr==endnode)
+      {
+        last->next = newnode;
+        last = newnode;
+        newnode->next = endnode;
+        return;
+      }
+      // ptr is not first or end
+      prev->next=newnode;
+      newnode->next=ptr;
+      return;
+    }
+    else
+    {
+      last->next = newnode;
+      last = newnode;
+      newnode->next = endnode;
+    }
   }
   void Sort()
   {
@@ -157,6 +198,7 @@ template<class A, class B> class MapList
     return Iterator<A,B>(endnode);
   }
   private:
+  bool sort=true;
   int size=0;
   Node2_t *first;
   Node2_t *last;
