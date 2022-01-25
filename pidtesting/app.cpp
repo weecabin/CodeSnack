@@ -88,20 +88,20 @@ int main() {
     if (lt==proportional)
     {
       maxPidDelta = .01;
-      maxHeadErr = 5;
+      maxHeadErr = 1;
     }
     else
     {
       maxPidDelta = .001;
       maxHeadErr = .001;
     }
-    Map<float,std::vector<float>> mf;
+    Map<float,std::vector<float>> mf(10);
     if (true)
     {
     int count=0;
-    for (float kp=0;kp<=5;kp+=.2)
-      for (float ki=0;ki<=5;ki+=.2)
-        for(float kd=0;kd>=-5;kd-=.2)
+    for (float kp=0;kp<=11;kp+=.2)
+      for (float ki=-1;ki<=1;ki+=.2)
+        for(float kd=5;kd>=-5;kd-=.2)
         {
           p.SetCoefficients(kp,ki,kd);
           h.Init(initialHeading,initialRudder);
@@ -124,8 +124,8 @@ int main() {
           {
             count++;
             //print(heading);print("/");print(target);print(" ");println(headerr);
-            print("kp,ki,kd: ");print(kp);print(",");print(ki);print(",");print(kd);
-            print(" DeltaErr: ");print(piddelta);print(" heading: ");println(heading);
+            //print("kp,ki,kd: ");print(kp);print(",");print(ki);print(",");print(kd);
+            //print(" DeltaErr: ");print(piddelta);print(" heading: ");println(heading);
             kp1=kp;
             kd1=kd;
             ki1=ki;
@@ -173,7 +173,7 @@ int main() {
       print("PID Dataset Delta: ");println(p.DeltaError());
       p.Print();
       print("best 10/");print(mf.Size());println(" pid parameters...");
-      mf.List(PrintMapValue,10);
+      mf.List(PrintMapValue);
     }
     
     return 0;
