@@ -74,15 +74,15 @@ int main() {
     float turnRate=.1;// (deg/sec)/rudderdeg
     float target=10.0;
     float interval=1;
-    float windRate=1;
+    float windRate=-.5;
     PIDCtrl p(0,0,0,interval,15);
     int testLoopLen = 50;
     Heading h(initialHeading,initialRudder,maxRudder,turnRate,windRate);
     float kp1=1;
     float ki1=0;
     float kd1=0;
-    //LoopType lt = differential;;
-    LoopType lt = proportional;
+    LoopType lt = differential;;
+    //LoopType lt = proportional;
     float maxPidDelta;
     float maxHeadErr;
     if (lt==proportional)
@@ -92,16 +92,16 @@ int main() {
     }
     else
     {
-      maxPidDelta = .001;
-      maxHeadErr = .001;
+      maxPidDelta = .1;
+      maxHeadErr = .1;
     }
     Map<float,std::vector<float>> mf(10);
     if (true)
     {
     int count=0;
-    for (float kp=0;kp<=11;kp+=.2)
+    for (float kp=-10;kp<=15;kp+=.2)
       for (float ki=-1;ki<=1;ki+=.2)
-        for(float kd=5;kd>=-5;kd-=.2)
+        for(float kd=5;kd>=-10;kd-=.2)
         {
           p.SetCoefficients(kp,ki,kd);
           h.Init(initialHeading,initialRudder);
@@ -148,6 +148,7 @@ int main() {
         //print("Using kp,ki,kd: ");print(kp1);print(",");print(ki1);print(",");println(kd1);
         //p.SetCoefficients(kp1,ki1,kd1);
         p.SetCoefficients(mf[0][0],mf[0][1],mf[0][2]);
+        print("initialized pid ");p.BufferIsFull()?println("full\n"):println("not full\n");
         h.Init(initialHeading,initialRudder);
         print("Target Heading: ");println(target);
         print("Initial Heading: ");println(initialHeading);
@@ -163,6 +164,7 @@ int main() {
         print("\t");print(h.GetRudder());
         print("\t");println(heading);
         p.NextError(-HeadingError(target,heading));
+        if (!p.BufferIsFull())continue;
         if (lt==differential)
           h.SetRudder(h.GetRudder()+p.Correction());
         else
