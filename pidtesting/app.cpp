@@ -12,7 +12,8 @@
 #include "../cslib/MyDefines.h"
 #include "../cslib/Map.h"
 #include <vector>
-  
+  // test
+
 class Heading
 {
   public:
@@ -81,27 +82,27 @@ int main() {
     float kp1=1;
     float ki1=0;
     float kd1=0;
-    LoopType lt = differential;;
-    //LoopType lt = proportional;
+    //LoopType lt = differential;;
+    LoopType lt = proportional;
     float maxPidDelta;
     float maxHeadErr;
     if (lt==proportional)
     {
-      maxPidDelta = .01;
+      maxPidDelta = 1;
       maxHeadErr = 1;
     }
     else
     {
-      maxPidDelta = .1;
-      maxHeadErr = .1;
+      maxPidDelta = 1;
+      maxHeadErr = 1;
     }
     Map<float,std::vector<float>> mf(10);
     if (true)
     {
     int count=0;
     for (float kp=-10;kp<=15;kp+=.2)
-      for (float ki=-1;ki<=1;ki+=.2)
-        for(float kd=5;kd>=-10;kd-=.2)
+      for (float ki=-10;ki<=10;ki+=.2)
+        for(float kd=10;kd>=-10;kd-=.2)
         {
           p.SetCoefficients(kp,ki,kd);
           h.Init(initialHeading,initialRudder);
@@ -174,7 +175,7 @@ int main() {
         print("PID Integral Term: ");println(p.Integral());
       print("PID Dataset Delta: ");println(p.DeltaError());
       p.Print();
-      print("best 10/");print(mf.Size());println(" pid parameters...");
+      print("\nbest 10/");print(mf.Size());println(" pid parameters...");
       mf.List(PrintMapValue);
     }
     

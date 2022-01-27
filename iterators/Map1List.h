@@ -1,25 +1,25 @@
-#ifndef MYLIST_H
-#define MYLIST_H
+#ifndef MAP1LIST_H
+#define MAP1LIST_H
 #include <iostream>
 
-template<class A, class B> class MapNode
+template<class A, class B> class Map1Node
 {
   public:
-  MapNode(){};
-  MapNode(A key, B value)
+  Map1Node(){};
+  Map1Node(A key, B value)
   {
     this->key=key;
     this->value=value;
   }
   A key;
   B value;
-  MapNode<A,B> *next=nullptr;
+  Map1Node<A,B> *next=nullptr;
 };
 
 template<class A, class B>
 class Iterator
 {
-    using Node2_t = MapNode<A,B>;
+    using Node2_t = Map1Node<A,B>;
     // constructor that takes in a pointer from the linked list
     public:
     Iterator() noexcept : current_node(nullptr){};
@@ -81,24 +81,24 @@ private:
     Node2_t *current_node = nullptr;
 };
 
-template<class A, class B> class MapList
+template<class A, class B> class Map1List
 {
-  using Node2_t = MapNode<A,B>;
+  using Node2_t = Map1Node<A,B>;
   public:
 
-  MapList(bool sort)
+  Map1List(bool sort)
   {
     this->sort=sort;
     endnode=new Node2_t; // empty end node
   }
 
-  MapList()
+  Map1List()
   {
     this->sort=true;
     endnode=new Node2_t;
   }
 
-  ~MapList()
+  ~Map1List()
   {
     Node2_t *temp=first;
     while(temp!=endnode)

@@ -5,19 +5,19 @@
 //
 // Happy coding! :-)
 #include "../cslib/MyDefines.h"
-#include "MapList.h"
+#include "Map1List.h"
 
 int main() {
-    std::cout << "Hello, World!\n";
+    std::cout << "\n******** Map1List Test ********\n";
 
-    MapList<int,float> list;
+    Map1List<int,float> list;
     for (int i=1;i<11;i++)
     {
       list.Insert(10-i,10-i*1.1);
     }
-    println("print with MapList.Print()...");
+    println("print with Map1List.Print()...");
     list.Print();
-  
+
     println("print a few values using the iterator...");
     Iterator<int,float> itr(list.begin());
     println(*itr++);

@@ -8,7 +8,7 @@ void CircularBufferTest();
 void SchedulerTest();
 
 int main() {
-    CircularBufferTest();
+    //CircularBufferTest();
     SchedulerTest();
     return 0;
 }
