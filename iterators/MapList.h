@@ -16,8 +16,6 @@ template<class A, class B> class MapNode
   MapNode<A,B> *next=nullptr;
 };
 
-
-
 template<class A, class B>
 class Iterator
 {
@@ -55,7 +53,7 @@ class Iterator
     // debug dump value 
     void Print()
     {
-      std::cout<<current_node->value;
+      std::cout<<"key: "<<current_node->key<<" Value: "<<current_node->value<<"\n";
     };
 
     // return the data from the node (dereference operator)
