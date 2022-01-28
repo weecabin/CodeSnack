@@ -2,6 +2,7 @@
 #define MAP1LIST_H
 #include <iostream>
 
+// Node for the single (1) linked list Map1List
 template<class A, class B> class Map1Node
 {
   public:
@@ -30,7 +31,7 @@ class Iterator
     {
         if (current_node != nullptr)
         {
-            previous_node = current_node;
+            //previous_node = current_node;
             current_node = current_node->next;
         }
         return *this;
@@ -63,6 +64,8 @@ class Iterator
         return this->current_node->value;
     };
 
+    // searches the list from the current position to the end
+    // returns the Iterator associated with key
     Iterator operator[](A key)
     { 
       Node2_t *temp = current_node;
@@ -77,10 +80,13 @@ class Iterator
     }
 
 private:
-    Node2_t *previous_node = nullptr;
+    // was going to use this for delete and insert, but it was messy
+    // may visit it again
+    //Node2_t *previous_node = nullptr;
     Node2_t *current_node = nullptr;
 };
 
+// Map1List, implemented as a single linked list
 template<class A, class B> class Map1List
 {
   using Node2_t = Map1Node<A,B>;
