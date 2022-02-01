@@ -20,49 +20,53 @@ class Circle
   {
     interval = 1000*totalSeconds/segments;
     nextTurnTime = millis + interval;
-    heading=initialHeading;
+    oldHeading=initialHeading;
     deltaHeading =(turn==left?-1:1) * 360.0/(float)segments;
   }
   void Stop()
   {
-    nextTurnTime==0;
+    nextTurnTime=0;
   }
-  float NewHeading(unsigned long millis)
+  bool NewHeading(unsigned long millis, float &heading) 
   {
     if (nextTurnTime==0 || millis<nextTurnTime)
-      return heading;
-    heading+=deltaHeading;
-    heading=FixHeading(heading);
+      return false;
+    oldHeading+=deltaHeading;
+    oldHeading=FixHeading(oldHeading);
+    heading = oldHeading;
     nextTurnTime+=interval;
-    return heading;
+    return true;
   }
   private:
   unsigned int interval;
   unsigned long nextTurnTime=0;
-  float heading;
+  float oldHeading;
   float deltaHeading;
 };
 
 MyTime ms;
-float lastHeading=0;
-
+float targetheading=0;
 Circle circ;
 
 void Circle()
 {
-  float nextHeading = circ.NewHeading(ms.millis());
-  if (nextHeading!=lastHeading)
+  if (circ.NewHeading(ms.millis(),targetheading))
   {
-    print(ms.millis());print(": ");println(nextHeading);
-    lastHeading=nextHeading;
+    print(ms.millis());print(": ");println(targetheading);
   }
 }
 
-int main() 
+void KillCircle()
 {
-  
+  println("KillCircle");
+  circ.Stop();
+}
+
+int main()
+{
   Scheduler s(2);
-  s.AddTask(new FunctionTask(Circle,1));
-  circ.Start(ms.millis(),lastHeading,left,180,18);
-  s.Run(200);
+  s.AddTask(new FunctionTask(Circle,.1));
+  s.AddTask(new FunctionTask(KillCircle,5,1));
+  circ.Start(ms.millis(),targetheading,left,30,18);
+  s.Run(15);
 }
