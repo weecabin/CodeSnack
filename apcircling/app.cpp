@@ -31,7 +31,7 @@ class Circle
   {
     if (nextTurnTime==0 || millis<nextTurnTime)
       return false;
-    heading = FixHeading(this->heading+=deltaHeading);
+    heading = this->heading = FixHeading(this->heading+=deltaHeading);
     nextTurnTime+=interval;
     return true;
   }
