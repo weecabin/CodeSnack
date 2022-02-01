@@ -14,11 +14,15 @@ class Circle
   public:
   Circle()
   {
-  
+    Config();
   }
-  void Start(unsigned long millis, float initialHeading, TurnDirection turn, int totalSeconds, int segments)
+  void Config(int totalSeconds=240, int segments=20)
   {
+    this->segments=segments;
     interval = 1000*totalSeconds/segments;
+  }
+  void Start(unsigned long millis, float initialHeading, TurnDirection turn)
+  {
     nextTurnTime = millis + interval;
     heading=initialHeading;
     deltaHeading =(turn==left?-1:1) * 360.0/(float)segments;
@@ -36,6 +40,7 @@ class Circle
     return true;
   }
   private:
+  int segments;
   unsigned int interval;
   unsigned long nextTurnTime=0;
   float heading;
@@ -46,7 +51,7 @@ MyTime ms;
 float targetheading=0;
 Circle circ;
 
-void Circle()
+void CircleTask()
 {
   if (circ.NewHeading(ms.millis(),targetheading))
   {
@@ -63,8 +68,8 @@ void KillCircle()
 int main()
 {
   Scheduler s(2);
-  s.AddTask(new FunctionTask(Circle,.1));
+  s.AddTask(new FunctionTask(CircleTask,.1));
  // s.AddTask(new FunctionTask(KillCircle,30,1));
-  circ.Start(ms.millis(),targetheading,left,120,20);
+  circ.Start(ms.millis(),targetheading,right);
   s.Run(120);
 }
