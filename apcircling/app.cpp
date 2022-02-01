@@ -20,7 +20,7 @@ class Circle
   {
     interval = 1000*totalSeconds/segments;
     nextTurnTime = millis + interval;
-    oldHeading=initialHeading;
+    heading=initialHeading;
     deltaHeading =(turn==left?-1:1) * 360.0/(float)segments;
   }
   void Stop()
@@ -31,16 +31,14 @@ class Circle
   {
     if (nextTurnTime==0 || millis<nextTurnTime)
       return false;
-    oldHeading+=deltaHeading;
-    oldHeading=FixHeading(oldHeading);
-    heading = oldHeading;
+    heading = FixHeading(this->heading+=deltaHeading);
     nextTurnTime+=interval;
     return true;
   }
   private:
   unsigned int interval;
   unsigned long nextTurnTime=0;
-  float oldHeading;
+  float heading;
   float deltaHeading;
 };
 
@@ -66,7 +64,7 @@ int main()
 {
   Scheduler s(2);
   s.AddTask(new FunctionTask(Circle,.1));
-  s.AddTask(new FunctionTask(KillCircle,5,1));
-  circ.Start(ms.millis(),targetheading,left,30,18);
-  s.Run(15);
+ // s.AddTask(new FunctionTask(KillCircle,30,1));
+  circ.Start(ms.millis(),targetheading,left,120,20);
+  s.Run(120);
 }
