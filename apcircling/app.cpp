@@ -18,30 +18,33 @@ class Circle
   }
   void Config(int totalSeconds=240, int segments=20)
   {
+    //println("in Config");
     this->segments=segments;
     interval = 1000*totalSeconds/segments;
   }
   void Start(unsigned long millis, float initialHeading, TurnDirection turn)
   {
-    nextTurnTime = millis + interval;
+    nextTurnTime = millis;
     heading=initialHeading;
     deltaHeading =(turn==left?-1:1) * 360.0/(float)segments;
+    enabled=true;
   }
   void Stop()
   {
-    nextTurnTime=0;
+    enabled=false;
   }
   bool NewHeading(unsigned long millis, float &heading) 
   {
-    if (nextTurnTime==0 || millis<nextTurnTime)
+    if (!enabled || millis<nextTurnTime)
       return false;
     heading = this->heading = FixHeading(this->heading+=deltaHeading);
     nextTurnTime+=interval;
     return true;
   }
   private:
+  bool enabled=false;
   int segments;
-  unsigned int interval;
+  unsigned long interval;
   unsigned long nextTurnTime=0;
   float heading;
   float deltaHeading;
@@ -67,9 +70,11 @@ void KillCircle()
 
 int main()
 {
+  println("in main");
   Scheduler s(2);
-  s.AddTask(new FunctionTask(CircleTask,.1));
- // s.AddTask(new FunctionTask(KillCircle,30,1));
+  s.AddTask(new FunctionTask(CircleTask,.01));
+  s.AddTask(new FunctionTask(KillCircle,15,1));
+  circ.Config(15,40);
   circ.Start(ms.millis(),targetheading,right);
-  s.Run(120);
+  s.Run(20);
 }
