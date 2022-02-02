@@ -22,8 +22,9 @@ class Circle
     this->segments=segments;
     interval = 1000*totalSeconds/segments;
   }
-  void Start(unsigned long millis, float initialHeading, TurnDirection turn)
+  void Start(unsigned long millis, float initialHeading, TurnDirection turn, float turnDegrees=0)
   {
+    this->turnDegrees = turnDegrees;
     nextTurnTime = millis;
     heading=initialHeading;
     deltaHeading =(turn==left?-1:1) * 360.0/(float)segments;
@@ -39,9 +40,18 @@ class Circle
       return false;
     heading = this->heading = FixHeading(this->heading+=deltaHeading);
     nextTurnTime+=interval;
+    if (turnDegrees!=0)
+    {
+      turnDegrees-=abs(deltaHeading);
+      if (turnDegrees<=0)
+      {
+        enabled=false;
+      }
+    }
     return true;
   }
   private:
+  float turnDegrees;
   bool enabled=false;
   int segments;
   unsigned long interval;
@@ -75,6 +85,6 @@ int main()
   s.AddTask(new FunctionTask(CircleTask,.01));
   s.AddTask(new FunctionTask(KillCircle,15,1));
   circ.Config(15,40);
-  circ.Start(ms.millis(),targetheading,right);
+  circ.Start(ms.millis(),targetheading,right,90);
   s.Run(20);
 }
