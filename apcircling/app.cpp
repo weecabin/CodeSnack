@@ -84,7 +84,7 @@ int main()
   Scheduler s(2);
   s.AddTask(new FunctionTask(CircleTask,.01));
   s.AddTask(new FunctionTask(KillCircle,15,1));
-  circ.Config(15,40);
-  circ.Start(ms.millis(),targetheading,right,90);
+  circ.Config(15,36);
+  circ.Start(ms.millis(),targetheading,right,360);
   s.Run(20);
 }

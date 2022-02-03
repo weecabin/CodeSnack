@@ -49,6 +49,15 @@ int main() {
     println("\ndelete key 9");
     list.Delete(9);
     list.Print();
-    return 0;
+
+
+    Map1List<const char *, int> ml;
+    const char key2[] = "key2";
+    const char key1[] = "key1";
+    ml.Insert(key2,2);
+    ml.Insert(key1,1);
+    ml.Print();
+
+      return 0;
 }
 

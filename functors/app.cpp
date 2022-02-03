@@ -16,7 +16,8 @@ class Equal
   }
 };
 
-class EqualChar
+template<>
+class Equal<char *>
 {
   public:
   bool operator()(char *str1, char *str2)
@@ -42,7 +43,8 @@ class Less
   }
 };
 
-class LessChar
+template<>
+class Less<char *>
 {
   public:
   bool operator()(char *str1, char *str2)
@@ -56,12 +58,13 @@ class LessChar
   }
 };
 
-template<class A, class less = Less<A>, class Eq = Equal<A>>
+template<class A, class Lt = Less<A>, class Eq = Equal<A>>
 class Test
 {
   public:
   Test(int size)
   {
+    eq = Eq();
     this->size = size;
     x = new A[size];
     index=0;
@@ -77,7 +80,6 @@ class Test
     if (++valuesIn==size)valuesIn--;
     if (index>=size)
       index=0;
-    less lt;
     for (int i=0;i<valuesIn-1;i++)
       for (int j=i+1;j<valuesIn;j++)
       {
@@ -93,7 +95,6 @@ class Test
   }
   bool Exists(A a)
   {
-    Eq eq;
     for (int i=0;i<valuesIn-1;i++)
     {
       if (eq(x[i],a))
@@ -108,6 +109,8 @@ class Test
     std::cout<<"\n";
   }
   private:
+  Lt lt;
+  Eq eq;
   A *x;
   int index;
   int size;
@@ -155,8 +158,8 @@ int main()
     std::cout<<"No";
   std::cout<<"\n";
 
-  std::cout<<"\nTest<char*,LessChar, EqualChar> tc2(5);\n";
-  Test<char*,LessChar, EqualChar> tc2(5);
+  std::cout<<"\nTest<char*,tc2(5);\n";
+  Test<char*> tc2(5);
   tc2.Add(str1);
   tc2.Add(str2);
   tc2.Add(str3);
