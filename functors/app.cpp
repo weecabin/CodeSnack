@@ -6,6 +6,8 @@
 // Happy coding! :-)
 #include <iostream>
 #include <cstring>
+#include "../cslib/MyDefines.h"
+
 template <class A>
 class Equal
 {
@@ -16,6 +18,7 @@ class Equal
   }
 };
 
+// template specialization
 template<>
 class Equal<char *>
 {
@@ -43,6 +46,7 @@ class Less
   }
 };
 
+// template specialization...
 template<>
 class Less<char *>
 {
@@ -62,8 +66,9 @@ template<class A, class Lt = Less<A>, class Eq = Equal<A>>
 class Test
 {
   public:
-  Test(int size)
+  Test(int size,bool sort=false)
   {
+    this->sort = sort;
     eq = Eq();
     this->size = size;
     x = new A[size];
@@ -80,7 +85,7 @@ class Test
     if (++valuesIn==size)valuesIn--;
     if (index>=size)
       index=0;
-    for (int i=0;i<valuesIn-1;i++)
+    for (int i=0;sort && i<valuesIn-1;i++)
       for (int j=i+1;j<valuesIn;j++)
       {
         //std::cout<<"compare: "<<x[i]<<"-"<<x[j]<<"\n";
@@ -109,6 +114,7 @@ class Test
     std::cout<<"\n";
   }
   private:
+  bool sort;
   Lt lt;
   Eq eq;
   A *x;
@@ -121,12 +127,13 @@ int main()
 {
   std::cout << "Hello, World!\n";
 
+  println("Less<int> li;");
   Less<int> li;
   std::cout<<"li(1,2): "<<li(1,2)<<"\n";
   std::cout<<"li(2,1): "<<li(2,1)<<"\n";
-  
+
+  println("\nLess<char*> lc;");
   Less<char*> lc;
-  
   char str2[]="234";
   char str1[]="123";
   char str3[]="345";
@@ -136,16 +143,21 @@ int main()
   std::cout<<"lc(\"123\",\"234\"): "<<lc(str1,str2)<<"\n";
   std::cout<<"lc(\"234\",\"123\"): "<<lc(str2,str1)<<"\n";
 
+  println("\n Test<float> tf(5);");
   Test<float> tf(5);
+  println("add 3.3 1.1 2.2 .5 5.2 3.35");
   tf.Add(3.3);
   tf.Add(1.1);
   tf.Add(2.2);
+  tf.Add(.5);
+  tf.Add(5.2);
+  tf.Add(3.35);
   tf.Print();
 
-  std::cout<<"\nTest<char*> tc(5);\n";
-  Test<char*> tc(5);
-  tc.Add(str1);
+  std::cout<<"\nTest<char*> tc(5,true);\n";
+  Test<char*> tc(5,true);
   tc.Add(str2);
+  tc.Add(str1);
   tc.Add(str3);
   tc.Add(str4);
   tc.Add(str5);
@@ -153,21 +165,6 @@ int main()
   char srch[] = "345";
   std::cout<<"find 345 ";
   if (tc.Exists(srch))
-    std::cout<<"Yes";
-  else
-    std::cout<<"No";
-  std::cout<<"\n";
-
-  std::cout<<"\nTest<char*,tc2(5);\n";
-  Test<char*> tc2(5);
-  tc2.Add(str1);
-  tc2.Add(str2);
-  tc2.Add(str3);
-  tc2.Add(str4);
-  tc2.Add(str5);
-  tc2.Print();
-  std::cout<<"find 345 ";
-  if (tc2.Exists(srch))
     std::cout<<"Yes";
   else
     std::cout<<"No";
