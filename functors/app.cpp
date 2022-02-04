@@ -69,7 +69,6 @@ class Test
   Test(int size,bool sort=false)
   {
     this->sort = sort;
-    eq = Eq();
     this->size = size;
     x = new A[size];
     index=0;
