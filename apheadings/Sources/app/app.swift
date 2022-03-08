@@ -4,6 +4,7 @@
 // the output in the terminal below
 //
 // Happy coding! :-)
+// Testing
 
 class TranslateHeading{
     var headingAtApZero:Float
@@ -14,7 +15,7 @@ class TranslateHeading{
     }
 
   func NewZeroHeading(heading:Float){
-      print("AP 0 = \(heading)")
+      print("Set \(heading) = AP 0")
       headingAtApZero = heading
   }
 
@@ -41,23 +42,23 @@ class TranslateHeading{
 let translate = TranslateHeading(headingAtApZero:40)
 
 var h:Float = 55
-print("AP heading for true heading of \(h) = \(translate.ApHeading(stearHeading:h))")
+print("true heading \(h) = AP \(translate.ApHeading(stearHeading:h))")
 
 h = 30
-print("AP heading for true heading of \(h) = \(translate.ApHeading(stearHeading:h))")
+print("true heading \(h) = AP \(translate.ApHeading(stearHeading:h))")
 
 h = 350
-print("AP heading for true heading of \(h) = \(translate.ApHeading(stearHeading:h))")
+print("true heading \(h) = AP \(translate.ApHeading(stearHeading:h))")
 
 translate.NewZeroHeading(heading:330)
 h = 30
-print("AP heading for true heading of \(h) = \(translate.ApHeading(stearHeading:h))")
+print("true heading \(h) = AP \(translate.ApHeading(stearHeading:h))")
 
 h = 350
-print("AP heading for true heading of \(h) = \(translate.ApHeading(stearHeading:h))")
+print("true heading \(h) = AP \(translate.ApHeading(stearHeading:h))")
 
 h = 310
-print("AP heading for true heading of \(h) = \(translate.ApHeading(stearHeading:h))")
+print("true heading \(h) = AP \(translate.ApHeading(stearHeading:h))")
 
 h = 90
-print("AP heading for true heading of \(h) = \(translate.ApHeading(stearHeading:h))")
+print("true heading \(h) = AP \(translate.ApHeading(stearHeading:h))")
