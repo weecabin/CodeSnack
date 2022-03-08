@@ -5,12 +5,16 @@
 //
 // Happy coding! :-)
 
-
 print("Hello, World!");
 
 protocol MessageInDelegate{
     func messageIn(msg:String)
 }
+
+/*
+This class will call the delegate (callback) function as long
+as its delegate variable is not nil
+*/
 
 class Test1{
     init(){
@@ -25,7 +29,7 @@ class Test1{
 }
 
 /*
-the Delegate class defines the function, the other class will call into
+the Delegate class conforms to the protocol and defines the function, the other class will call into
 this class must assign self to the delegate variable in the other class
 */
 class Test2:MessageInDelegate{
