@@ -27,16 +27,23 @@ class Test1{
     func Hi(){
         if let msgdelegate = messageInDelegate
       {
-         msgdelegate.messageIn(msg:"Hi to you")
+         msgdelegate.messageIn(msg:"Hi to you from test1")
       }else
-    {
+      {
        print("No delegate registered")
-    }
-        
-      if msgInDel.count>0{
-          for i in (0...msgInDel.count-1){
-            msgInDel[i].messageIn(msg:"Hi \(i)")
-          }
+      }
+      print("Indexed loop")
+      if msgInDel.count>0
+      {
+        for i in (0...msgInDel.count-1)
+        {
+            msgInDel[i].messageIn(msg:"Hi delegate\(i) from test1")
+        }
+      }
+      print("for in loop")
+      for del in msgInDel
+      {
+          del.messageIn(msg:"Hi Again from test1")
       }
     }
 }
@@ -67,9 +74,8 @@ print("Now register...")
 test1.messageInDelegate = test2
 test1.Hi()
 
-print("\ntry the array delegate...")
+print("\ntry the array delegate with a few different looping methods...")
 test1.messageInDelegate = nil
 test1.AddDelegate(del:test2)
-test1.AddDelegate(del:test3)
 test1.AddDelegate(del:test3)
 test1.Hi()
